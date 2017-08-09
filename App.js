@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
-import PlaceHolder from './frontend/components/placeHolderComponent';
+import Login from './frontend/components/Login';
 
 export default StackNavigator({
-  PlaceHolder: {
-    screen: PlaceHolder
+  Login: {
+    screen: Login
   }
-}, {initialRouteName: 'PlaceHolder'});
+}, {initialRouteName: 'Login'});
