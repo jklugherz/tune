@@ -18,6 +18,7 @@ const server = require('http').Server(app);
 app.use( bodyParser.json() );
 app.use( bodyParser.urlencoded( { extended: false } ) );
 
+
 var session = require('express-session');
 app.use(session({ secret: 'this is a secret' }));
 
@@ -34,10 +35,11 @@ passport.deserializeUser(function(id, done) {
 passport.use(new SpotifyStrategy({
     clientID: process.env.SPOTIFY_CLIENT_ID,
     clientSecret: process.env.SPOTIFY_SECRET,
-    callbackURL: process.env.SPOTIFY_REDIRECT_URI
+    callbackURL: 'http://localhost:3000/auth/login/callback'
   },
   function(accessToken, refreshToken, profile, cb) {
     // var photo = profile.photos[0] ? profile.photos[0] : "/static/images/anonymous.jpeg";
+    console.log('hey');
     var username = profile.displayName ? profile.displayName : "Anonymous";
     User.findOrCreate({ spotifyId: profile.id }, {accessToken: accessToken, refreshToken:refreshToken, username: username }, function (err, user) {
       return cb(err, user);
