@@ -1,0 +1,23 @@
+{
+  "name": "tune",
+  "version": "0.0.0",
+  "description": "Hello Expo!",
+  "author": null,
+  "private": true,
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "nodemon ./backend/server.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "expo": "^19.0.0",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.4",
+    "nodemon": "^1.11.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "react": "16.0.0-alpha.12",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-19.0.0.tar.gz",
+    "react-navigation": "^1.0.0-beta.11"
+  }
+}
