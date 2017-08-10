@@ -10,8 +10,13 @@ module.exports = function(passport) {
 
   router.get('/auth/login/callback',
     passport.authenticate('spotify', { failureRedirect: '/' }), function(req, res) {
-      res.redirect('/'); //HOW DO I GET BACK TO MY APP? 
+      res.redirect('/auth/login/success');
   });
+
+  router.get('/auth/login/success', function(req, res) {
+    console.log('where now?')
+    res.redirect(process.env.EXPO_URI + '/+');
+  })
 
   return router;
 }
