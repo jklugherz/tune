@@ -1,26 +1,43 @@
 var routes = require('./routes');
 var auth = require('./auth');
-const express = require( 'express' );
-var bodyParser = require( 'body-parser' );
+const express = require('express');
+var session = require('express-session');
+var bodyParser = require('body-parser');
+var path = require('path');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var MongoStore = require('connect-mongo')(session);
+var mongoose = require('mongoose');
+var connect = process.env.MONGODB_URI;
 
 //passport
 var passport = require('passport');
 var SpotifyStrategy = require('passport-spotify').Strategy;
+
 var models = require('./models');
 var User = models.User;
+mongoose.connect(connect);
+
 
 const app = express();
-
 
 //handles sockets
 const server = require('http').Server(app);
 
-app.use( bodyParser.json() );
-app.use( bodyParser.urlencoded( { extended: false } ) );
+app.use(logger('tiny'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
+//passport stuff
+app.use(session({
+  secret: 'this is a secret',
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
 
-var session = require('express-session');
-app.use(session({ secret: 'this is a secret' }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.serializeUser(function(user, done) {
   done(null, user._id);
@@ -38,18 +55,15 @@ passport.use(new SpotifyStrategy({
     callbackURL: 'http://localhost:3000/auth/login/callback'
   },
   function(accessToken, refreshToken, profile, cb) {
-    // var photo = profile.photos[0] ? profile.photos[0] : "/static/images/anonymous.jpeg";
+    var photo = profile.photos[0] ? profile.photos[0] : "/static/images/anonymous.jpeg";
     console.log('hey');
     var username = profile.displayName ? profile.displayName : "Anonymous";
-    User.findOrCreate({ spotifyId: profile.id }, {accessToken: accessToken, refreshToken:refreshToken, username: username }, function (err, user) {
+    User.findOrCreate({ spotifyId: profile.id }, {accessToken: accessToken, refreshToken:refreshToken}, {photoURL: photo, username: username }, function (err, user) {
       return cb(err, user);
     });
   }
 ));
 
-
-app.use(passport.initialize());
-app.use(passport.session());
 
 app.use('/', auth(passport));
 app.use('/', routes);
