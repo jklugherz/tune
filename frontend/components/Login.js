@@ -1,9 +1,19 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Linking, Image, Button, TouchableHighlight } from 'react-native';
+import { Text, View, TouchableOpacity, Linking, Image, Button, TouchableHighlight, StyleSheet } from 'react-native';
 import { WebBrowser, Constants } from 'expo';
-import styles from '../styles/loginPageStyle';
 import Protected from './Protected';
-let url = process.env.EXPO_URI
+const url = process.env.EXPO_URI;
+
+
+const pageStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#e5f7ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
+
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -19,10 +29,10 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={pageStyles.container}>
         <View>
           <Image
-            source={require('../../assets/icons/app-icon.png')}
+            source={require('../../assets/icons/tuneapp.png')}
             style={{width: 100, height: 100}}
           />
         </View>
@@ -49,9 +59,9 @@ export default class Login extends React.Component {
     WebBrowser.dismissBrowser();
     console.log('event', event);
     this.setState({event: event.url});
-    if (this.state.event[this.state.event.length-1] === '+') {
+    if (this.state.event.split('?').length > 1) {
       const { navigate } = this.props.navigation;
-      navigate('Protected')
+      navigate('SideMenu', {userId: this.state.event.split('?')[1]})
     }
   }
 };

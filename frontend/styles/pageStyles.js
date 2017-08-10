@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet } from 'react-native';
 const pageStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#000',
     alignItems: 'center',
     justifyContent: 'center',
   },

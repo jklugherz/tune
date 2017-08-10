@@ -2,13 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
 import Login from './frontend/components/Login';
-import Protected from './frontend/components/Protected';
+import SideMenu from './frontend/components/SideMenu';
 
 export default StackNavigator({
   Login: {
-    screen: Login
+    screen: Login,
+    navigationOptions: {
+      header: null
+    }
   },
-  Protected: {
-    screen: Protected
+  SideMenu: {
+    screen: SideMenu,
+    navigationOptions: {
+      header: null
+    }
   }
 }, {initialRouteName: 'Login'});

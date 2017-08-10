@@ -10,12 +10,12 @@ module.exports = function(passport) {
 
   router.get('/auth/login/callback',
     passport.authenticate('spotify', { failureRedirect: '/' }), function(req, res) {
-      res.redirect('/auth/login/success');
+      res.redirect(`/auth/login/success?id=${req.user._id}`);
   });
 
   router.get('/auth/login/success', function(req, res) {
-    console.log('where now?')
-    res.redirect(process.env.EXPO_URI + '/+');
+    //console.log(req.query.id)
+    res.redirect(process.env.EXPO_URI + `/+?${req.query.id}`);
   })
 
   return router;
