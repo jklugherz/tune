@@ -34,12 +34,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 70,
     top: 20,
-    fontSize: 20
+    fontSize: 20,
+    fontWeight: '600',
   },
   item: {
     fontSize: 16,
     fontWeight: '500',
-    paddingTop: 5,
+    paddingTop: 10,
+
   },
 });
 

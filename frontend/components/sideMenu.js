@@ -105,24 +105,14 @@ export default class Basic extends Component {
       >
         <View style={styles.container}>
           <Text style={styles.welcome}>
-            Welcome to React Native!
-          </Text>
-          <Text style={styles.instructions}>
-            To get started, edit index.ios.js
-          </Text>
-          <Text style={styles.instructions}>
-            Press Cmd+R to reload,{'\n'}
-            Cmd+Control+Z for dev menu
-          </Text>
-          <Text style={styles.instructions}>
-            Current selected menu item is: {this.state.selectedItem}
+            Welcome to TuneBud!
           </Text>
         </View>
         <TouchableOpacity
           onPress={this.toggle}
           style={styles.button}
         >
-          <Text>hey</Text>
+          <Text>MENU</Text>
         </TouchableOpacity>
       </SideMenu>
     );
