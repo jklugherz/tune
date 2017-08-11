@@ -7,6 +7,8 @@ import {
   View,
   Image,
   Text,
+  TouchableHighlight,
+  TouchableOpacity
 } from 'react-native';
 
 const window = Dimensions.get('window');
@@ -46,6 +48,10 @@ const styles = StyleSheet.create({
 });
 
 export default function Menu({ onItemSelected, avatarURL, userName }) {
+
+  onLogoutPress = () => {
+  }
+
   return (
     <ScrollView scrollsToTop={false} style={styles.menu}>
       <View style={styles.avatarContainer}>
@@ -75,6 +81,10 @@ export default function Menu({ onItemSelected, avatarURL, userName }) {
       >
         Send a Song
       </Text>
+      <TouchableOpacity
+        onPress={() => this.onLogoutPress()}
+      ><Text style={styles.item}>Log Out</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }

@@ -5,6 +5,7 @@ import {
   View,
   Image,
   TouchableOpacity,
+  Button
 } from 'react-native';
 import SideMenu from 'react-native-side-menu';
 import axios from 'axios';
@@ -24,9 +25,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    // justifyContent: 'center',
+    // alignItems: 'center',
     backgroundColor: '#e5f7ff',
+    paddingTop: 30,
   },
   welcome: {
     fontSize: 20,
@@ -53,7 +55,7 @@ export default class Basic extends Component {
   }
 
   static navigationOptions = {
-      title: 'SideMenu'
+      title: 'My Groups'
   };
 
   componentWillMount() {
@@ -92,6 +94,11 @@ export default class Basic extends Component {
       selectedItem: item,
     });
 
+  createGroup = () => {
+    // console.log('button pressed')
+    this.props.navigation.navigate('NewGroup', {userId: this.props.navigation.state.params.userId});
+  }
+
   render() {
     const menu = <Menu onItemSelected={this.onMenuItemSelected}
     avatarURL={this.state.imageURL}
@@ -105,8 +112,14 @@ export default class Basic extends Component {
       >
         <View style={styles.container}>
           <Text style={styles.welcome}>
-            Welcome to TuneBud!
+            My TuneBud Groups:
+            {/*component with all of the current groups*/}
           </Text>
+          <Button
+            onPress={() => this.createGroup()}
+            title="Create Group"
+            color="#1db954"
+          />
         </View>
         <TouchableOpacity
           onPress={this.toggle}
@@ -114,6 +127,7 @@ export default class Basic extends Component {
         >
           <Text>MENU</Text>
         </TouchableOpacity>
+        <Text>My Groups</Text>
       </SideMenu>
     );
   }
