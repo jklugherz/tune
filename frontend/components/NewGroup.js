@@ -61,6 +61,7 @@ export default class NewGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      currentUserId: this.props.navigation.state.params.userId,
       allUsers: [],
       groupName: '',
       groupMembers: []
@@ -84,8 +85,20 @@ export default class NewGroup extends React.Component {
     })
   }
 
+
   displayAllUsers = () => {
-    //console.log(this.state.allUsers)
+    //first, find and remove current User from the allUsers array.
+    let usersArray = this.state.allUsers;
+    usersArray.forEach((user, index) => {
+      if (user._id === this.state.currentUserId) {
+        usersArray.splice(index, 1);
+      }
+    })
+
+    this.setState({
+      allUsers: usersArray
+    })
+
     return this.state.allUsers.map((user) => {
       return (
       <View style={styles.avatarContainer}>
