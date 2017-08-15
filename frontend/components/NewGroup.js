@@ -80,6 +80,18 @@ export default class NewGroup extends React.Component {
         allUsers: response.data.users
       })
     })
+    .then(() => {
+      let usersArray = this.state.allUsers;
+      usersArray.forEach((user, index) => {
+        if (user._id === this.state.currentUserId) {
+          usersArray.splice(index, 1);
+        }
+      })
+
+      this.setState({
+        allUsers: usersArray
+      })
+    })
     .catch((err) => {
       console.log('error', err);
     })
@@ -87,18 +99,6 @@ export default class NewGroup extends React.Component {
 
 
   displayAllUsers = () => {
-    //first, find and remove current User from the allUsers array.
-    let usersArray = this.state.allUsers;
-    usersArray.forEach((user, index) => {
-      if (user._id === this.state.currentUserId) {
-        usersArray.splice(index, 1);
-      }
-    })
-
-    this.setState({
-      allUsers: usersArray
-    })
-
     return this.state.allUsers.map((user) => {
       return (
       <View style={styles.avatarContainer}>
