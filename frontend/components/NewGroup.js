@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Linking, Button, StyleSheet, Image, TextInput, ScrollView } from 'react-native';
+import { Text, View, TouchableOpacity, Linking, StyleSheet, Button, Image, TextInput, ScrollView, Dimensions } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
@@ -11,20 +11,13 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#e5f7ff',
   },
-  inputContainer: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    margin: 10,
-    alignSelf: 'stretch'
-  },
   input: {
-    height: 40,
+    height: 30,
     alignSelf: 'center',
     borderStyle: 'solid',
     borderColor: '#000',
     borderWidth: 1,
-    margin: 10
+    marginBottom: 10
   },
   title: {
     fontSize: 15,
@@ -32,11 +25,11 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
-  peopleContainer: {
+  stepsContainer: {
     flexDirection: 'column',
     backgroundColor: '#fff',
     borderRadius: 10,
-    alignSelf: 'stretch',
+    width: Dimensions.get('window').width,
     margin: 10
   },
   avatarContainer: {
@@ -101,7 +94,9 @@ export default class NewGroup extends React.Component {
   displayAllUsers = () => {
     return this.state.allUsers.map((user) => {
       return (
-      <View style={styles.avatarContainer}>
+      <View
+        style={styles.avatarContainer}
+        key={user._id}>
         <Image
           style={styles.avatar}
           source={{uri: user.imageURL}}
@@ -122,18 +117,24 @@ export default class NewGroup extends React.Component {
       <View style={styles.container}>
         <Header title={'Create a New Group'} />
         <ScrollView>
-          <View style={styles.inputContainer}>
-            <Text style={styles.title}>Group name: </Text>
+          <View style={styles.stepsContainer}>
+            <Text style={styles.title}>1. Enter a group name: </Text>
             <TextInput
               style={styles.input}
-              placeholder="Enter a group name..."
+              placeholder="Group name...            "
               onChangeText={(text) => {this.setState({groupName: text})}}
             />
           </View>
-          <View style={styles.peopleContainer}>
-            <Text style={{ margin: 10 }}>Check group members: </Text>
+          <View style={styles.stepsContainer}>
+            <Text style={styles.title}>2. Check group members: </Text>
             {this.displayAllUsers()}
           </View>
+          <Button
+            onPress={() => this.onFormSubmit()}
+            title="Submit"
+            color="#fff"
+            backgroundColor="#236f82"
+          />
         </ScrollView>
       </View>
     )
