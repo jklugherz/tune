@@ -57,11 +57,6 @@ const styles = StyleSheet.create({
     top: 10,
     fontSize: 20,
     fontWeight: '400',
-  },
-  button: {
-    backgroundColor: '#236f82',
-    alignSelf: 'center',
-    width: 50
   }
 });
 
@@ -106,8 +101,13 @@ export default class NewGroup extends React.Component {
     })
   }
 
-  onPersonClick = (key) => {
-    console.log(key);
+  onPersonClick = (id) => {
+    // set background color to be highlighted - user ternary operator?
+    const currentGroup = this.state.groupMembers;
+    currentGroup.push(id);
+    this.setState({
+      groupMembers: currentGroup
+    })
   }
 
 
@@ -133,7 +133,21 @@ export default class NewGroup extends React.Component {
   }
 
   onFormSubmit = () => {
-    console.log('submit group')
+    console.log(this.state.groupMembers);
+    axios.post('http://localhost:3000/groups/create', {
+      name: this.state.groupName,
+      owner: this.state.currentUserId,
+      members: this.state.groupMembers
+    })
+    .then((response) => {
+      if (response.data.success) {
+        const { navigate } = this.props.navigation;
+        navigate('Profile', {groups: response.data.groups})
+      }
+    })
+    .catch((err) => {
+      console.log('error', err)
+    })
   }
 
 

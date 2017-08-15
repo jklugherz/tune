@@ -37,9 +37,19 @@ userSchema.statics.findOrCreate = function findOrCreate(idObj, tokensObj, infoOb
   });
 };
 
+var groupSchema = new Schema({
+  name: String,
+  owner: {
+    ref: User,
+    type: mongoose.Schema.Types.ObjectId
+  },
+  members: Array
+})
 
 var User = mongoose.model('User', userSchema);
+var Group = mongoose.model('Group', groupSchema);
 
 module.exports = {
-    User: User
+    User: User,
+    Group: Group
 };
