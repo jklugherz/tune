@@ -1,5 +1,16 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Linking, StyleSheet, Button, Image, TextInput, ScrollView, Dimensions } from 'react-native';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  TouchableHighlight,
+  StyleSheet,
+  Image,
+  TextInput,
+  ScrollView,
+  Dimensions }
+  from 'react-native';
+import { Button } from 'react-native-elements';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
@@ -29,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#fff',
     borderRadius: 10,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get('window').width * .9,
     margin: 10
   },
   avatarContainer: {
@@ -47,6 +58,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400',
   },
+  button: {
+    backgroundColor: '#236f82',
+    alignSelf: 'center',
+    width: 50
+  }
 });
 
 
@@ -90,25 +106,34 @@ export default class NewGroup extends React.Component {
     })
   }
 
+  onPersonClick = (key) => {
+    console.log(key);
+  }
+
 
   displayAllUsers = () => {
     return this.state.allUsers.map((user) => {
       return (
-      <View
-        style={styles.avatarContainer}
-        key={user._id}>
-        <Image
-          style={styles.avatar}
-          source={{uri: user.imageURL}}
-        />
-        <Text style={styles.name}>{user.username}</Text>
-        {/* check box  */}
-      </View>
+      <TouchableHighlight
+        key={user._id}
+        underlayColor='#ecf2f5'
+        onPress={() => this.onPersonClick(user._id)}
+        >
+        <View
+          style={styles.avatarContainer}
+          >
+          <Image
+            style={styles.avatar}
+            source={{uri: user.imageURL}}
+          />
+          <Text style={styles.name}>{user.username}</Text>
+        </View>
+      </TouchableHighlight>
     )})
   }
 
   onFormSubmit = () => {
-
+    console.log('submit group')
   }
 
 
@@ -130,10 +155,11 @@ export default class NewGroup extends React.Component {
             {this.displayAllUsers()}
           </View>
           <Button
+            raised
+            title='Submit'
+            backgroundColor='#1db954'
+            buttonStyle={{ marginTop: 10 }}
             onPress={() => this.onFormSubmit()}
-            title="Submit"
-            color="#fff"
-            backgroundColor="#236f82"
           />
         </ScrollView>
       </View>

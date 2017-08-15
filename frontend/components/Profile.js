@@ -30,6 +30,10 @@ export default class Profile extends React.Component {
     tabBarIcon: () => (<Icon size={24} color="white" name="account-circle" />)
   };
 
+  componentWillMount = () => {
+    console.log('Profile', Dimensions.get('window').width)
+  }
+
   render() {
     return (
       <View style={styles.container}>
