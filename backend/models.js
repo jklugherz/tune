@@ -10,7 +10,8 @@ var userSchema = new Schema({
   spotifyId: String,
   refreshToken: String,
   imageURL: String,
-  accessToken: String
+  accessToken: String,
+  groups: Array
 });
 
 userSchema.statics.findOrCreate = function findOrCreate(idObj, tokensObj, infoObj, cb) {
@@ -35,6 +36,7 @@ userSchema.statics.findOrCreate = function findOrCreate(idObj, tokensObj, infoOb
     }
   });
 };
+
 
 var User = mongoose.model('User', userSchema);
 

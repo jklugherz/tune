@@ -1,9 +1,45 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import { NavigationComponent } from 'react-native-material-bottom-navigation';
+import { StackNavigator, TabNavigator } from 'react-navigation';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import Login from './frontend/components/Login';
-import SideMenu from './frontend/components/SideMenu';
+import Profile from './frontend/components/Profile';
+import MyPlaylist from './frontend/components/MyPlaylist';
+import SongForm from './frontend/components/SongForm';
 import NewGroup from './frontend/components/NewGroup';
+
+console.disableYellowBox = true;
+
+const App = TabNavigator({
+  Profile: { screen: Profile },
+  MyPlaylist: { screen: MyPlaylist },
+  SongForm: { screen: SongForm },
+  NewGroup: { screen: NewGroup }
+}, {
+  tabBarComponent: NavigationComponent,
+  tabBarPosition: 'bottom',
+  tabBarOptions: {
+    bottomNavigationOptions: {
+      labelColor: 'white',
+      rippleColor: 'white',
+      tabs: {
+        Profile: {
+          barBackgroundColor: '#ECBF3B'
+        },
+        MyPlaylist: {
+          barBackgroundColor: '#ECBF3B'
+        },
+        SongForm: {
+          barBackgroundColor: '#ECBF3B'
+        },
+        NewGroup: {
+          barBackgroundColor: '#ECBF3B'
+        }
+      }
+    }
+  }
+})
 
 export default StackNavigator({
   Login: {
@@ -12,13 +48,11 @@ export default StackNavigator({
       header: null
     }
   },
-  SideMenu: {
-    screen: SideMenu,
+  App: {
+    screen: App,
     navigationOptions: {
       header: null
     }
-  },
-  NewGroup: {
-    screen: NewGroup,
   }
+
 }, {initialRouteName: 'Login'});

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, Linking, Image, Button, TouchableHighlight, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Linking, Image, StyleSheet } from 'react-native';
 import { WebBrowser, Constants } from 'expo';
-import Protected from './Protected';
 const url = process.env.EXPO_URI;
 
 
-const pageStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#e5f7ff',
@@ -29,19 +28,19 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={pageStyles.container}>
+      <View style={styles.container}>
         <View>
           <Image
             source={require('../../assets/icons/tuneapp.png')}
             style={{width: 100, height: 100}}
           />
         </View>
-        <TouchableHighlight onPress={() => {this._openWebBrowserAsync()}}>
+        <TouchableOpacity onPress={() => {this._openWebBrowserAsync()}}>
           <Image
             source={require('../../assets/icons/log_in-mobile.png')}
             style={{width: 200, resizeMode: 'contain', height: 200}}
           />
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -51,17 +50,17 @@ export default class Login extends React.Component {
     let result = await WebBrowser.openBrowserAsync(
       `http://localhost:3000/auth/login`
     );
-    console.log('result', result);
+    //console.log('result', result);
     Linking.removeEventListener('url', this._handleRedirect);
   }
 
   _handleRedirect = (event) => {
     WebBrowser.dismissBrowser();
-    console.log('event', event);
+    //console.log('event', event);
     this.setState({event: event.url});
     if (this.state.event.split('?').length > 1) {
       const { navigate } = this.props.navigation;
-      navigate('SideMenu', {userId: this.state.event.split('?')[1]})
+      navigate('App', {userId: this.state.event.split('?')[1]})
     }
   }
 };
