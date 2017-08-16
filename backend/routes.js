@@ -39,5 +39,25 @@ router.post('/groups/create', (req, res) => {
   })
 })
 
+router.get('/groups/allGroups', (req, res) => {
+  Group.find({}, (err, groups) => {
+    if (err) {
+      res.json({success: false, message: err})
+    } else {
+      res.json({success: true, groups: groups})
+    }
+  })
+})
+
+router.get('/groups/:id', (req, res) => {
+  Group.find( {owner: req.params.id}, (err, groups) => {
+    if (err) {
+      res.json({success: false, message: err})
+    } else {
+      res.json({success: true, groups: groups})
+    }
+  })
+})
+
 
 module.exports = router;

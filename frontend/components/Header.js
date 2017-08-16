@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
   },
   headerText: {
     color: '#fff',
-    fontSize: 16
+    fontSize: 16,
+    fontWeight: 'bold'
   }
 })
 

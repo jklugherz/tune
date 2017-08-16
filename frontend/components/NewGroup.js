@@ -104,12 +104,31 @@ export default class NewGroup extends React.Component {
   onPersonClick = (id) => {
     // set background color to be highlighted - user ternary operator?
     const currentGroup = this.state.groupMembers;
-    currentGroup.push(id);
+    if (!currentGroup.includes(id)) {
+      currentGroup.push(id);
+    }
     this.setState({
       groupMembers: currentGroup
     })
   }
 
+  onFormSubmit = () => {
+    console.log(this.state.groupMembers);
+    axios.post('http://localhost:3000/groups/create', {
+      name: this.state.groupName,
+      owner: this.state.currentUserId,
+      members: this.state.groupMembers
+    })
+    .then((response) => {
+      if (response.data.success) {
+        const { navigate } = this.props.navigation;
+        navigate('Profile', {groups: response.data.groups})
+      }
+    })
+    .catch((err) => {
+      console.log('error', err)
+    })
+  }
 
   displayAllUsers = () => {
     return this.state.allUsers.map((user) => {
@@ -132,25 +151,6 @@ export default class NewGroup extends React.Component {
     )})
   }
 
-  onFormSubmit = () => {
-    console.log(this.state.groupMembers);
-    axios.post('http://localhost:3000/groups/create', {
-      name: this.state.groupName,
-      owner: this.state.currentUserId,
-      members: this.state.groupMembers
-    })
-    .then((response) => {
-      if (response.data.success) {
-        const { navigate } = this.props.navigation;
-        navigate('Profile', {groups: response.data.groups})
-      }
-    })
-    .catch((err) => {
-      console.log('error', err)
-    })
-  }
-
-
   render() {
     return (
       <View style={styles.container}>
@@ -165,14 +165,14 @@ export default class NewGroup extends React.Component {
             />
           </View>
           <View style={styles.stepsContainer}>
-            <Text style={styles.title}>2. Check group members: </Text>
+            <Text style={styles.title}>2. Click to add a user to the group: </Text>
             {this.displayAllUsers()}
           </View>
           <Button
             raised
             title='Submit'
-            backgroundColor='#1db954'
-            buttonStyle={{ marginTop: 10 }}
+            backgroundColor='#648f00'
+            buttonStyle={{ marginTop: 10, width: Dimensions.get('window').width * .8, alignSelf: 'center' }}
             onPress={() => this.onFormSubmit()}
           />
         </ScrollView>
