@@ -136,7 +136,7 @@ export default class Profile extends React.Component {
   displayGroupsOwned = () => {
     if (this.state.groupsOwned.length > 0) {
       return this.state.groupsOwned.map((group) => {
-        return <TouchableOpacity><Text>
+        return <TouchableOpacity key={group._id}><Text>
           {group.name}: {group.members}
         </Text></TouchableOpacity>
       })
@@ -148,7 +148,7 @@ export default class Profile extends React.Component {
   displayOtherGroups = () => {
     if (this.state.groupsOwned.length > 0) {
       return this.state.groupsMember.map((group) => {
-        return <TouchableOpacity><Text>
+        return <TouchableOpacity key={group._id}><Text>
           {group.name}: {group.owner}(owner), {group.members}
         </Text></TouchableOpacity>
       })
@@ -163,19 +163,32 @@ export default class Profile extends React.Component {
     })
   }
 
-  onModalSubmit = () => {
+  handleChangeText = (song) => {
+    const songTitle = song.replace(' ', '%20')
     this.setState({
-      modalVisible: false
+      song: songTitle
     })
-    axios.get(`https://api.spotify.com/v1/search?q=${this.state.song}`)
-    .then((response) => {
-      if (response.data.success) {
-        console.log(response)
+  }
+
+  onModalSubmit = () => {
+    // this.setState({
+    //   modalVisible: false
+    // })
+    var options = {
+      headers: {
+        'Authorization': 'Bearer ' + this.state.user.accessToken,
       }
+    };
+
+    axios.get(`https://api.spotify.com/v1/search?q=${this.state.song}&type=song`, options)
+    .then((response) => {
+      console.log(response.data)
     })
     .catch((err) => {
       console.log('error', err)
     })
+
+
   }
 
   render() {
@@ -224,7 +237,7 @@ export default class Profile extends React.Component {
               round={true}
               lightTheme
               containerStyle={styles.searchStyle}
-              onChangeText={(text) => this.setState({ song: text})}
+              onChangeText={(text) => this.handleChangeText(text)}
               placeholder='Search by song title...' />
           </View>
           <View style={styles.innerContainer}>
@@ -239,7 +252,7 @@ export default class Profile extends React.Component {
             title='Submit'
             backgroundColor='#648f00'
             buttonStyle={{ marginTop: 10, width: Dimensions.get('window').width * .4, alignSelf: 'center' }}
-            onPress={() => this.onFormSubmit()}
+            onPress={() => this.onModalSubmit()}
           />
         </ScrollView>
       </View>

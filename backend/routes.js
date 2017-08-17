@@ -93,5 +93,9 @@ router.get('/groups/:id', (req, res) => {
   })
 })
 
+router.get('/song', (req, res) => {
+  conosle.log('reached song server endpoint')
+})
+
 
 module.exports = router;
