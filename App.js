@@ -6,7 +6,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Login from './frontend/components/Login';
 import Profile from './frontend/components/Profile';
 import MyPlaylist from './frontend/components/MyPlaylist';
-import SongForm from './frontend/components/SongForm';
 import NewGroup from './frontend/components/NewGroup';
 
 console.disableYellowBox = true;
@@ -14,7 +13,6 @@ console.disableYellowBox = true;
 const App = TabNavigator({
   Profile: { screen: Profile },
   MyPlaylist: { screen: MyPlaylist },
-  SongForm: { screen: SongForm },
   NewGroup: { screen: NewGroup }
 }, {
   tabBarComponent: NavigationComponent,
@@ -28,9 +26,6 @@ const App = TabNavigator({
           barBackgroundColor: '#ECBF3B'
         },
         MyPlaylist: {
-          barBackgroundColor: '#ECBF3B'
-        },
-        SongForm: {
           barBackgroundColor: '#ECBF3B'
         },
         NewGroup: {

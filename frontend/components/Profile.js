@@ -8,12 +8,14 @@ import {
   Text,
   TouchableHighlight,
   TouchableOpacity,
-  RefreshControl
+  RefreshControl,
+  Modal
 } from 'react-native';
 import axios from 'axios';
-
+import { SearchBar, Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+
 
 const styles = StyleSheet.create({
   container: {
@@ -44,9 +46,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '400',
   },
-  titleText: [
-
-  ]
+  searchStyle: {
+    margin: 10,
+    backgroundColor: '#fff',
+    borderColor: '#fff'
+  },
+  searchTitle: {
+    alignSelf: 'center',
+    fontWeight: '400',
+    fontSize: 16,
+    marginTop: 10
+  }
 })
 
 
@@ -54,9 +64,13 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      modalVisible: false,
       user: {},
       groupsOwned: [],
       groupsMember: [],
+      song: '',
+      chosenGroup: {},
+      songResult: {},
       refreshing: false
     }
   }
@@ -66,34 +80,29 @@ export default class Profile extends React.Component {
     tabBarIcon: () => (<Icon size={24} color="white" name="account-circle" />)
   };
 
-
-
   fetchData = () => {
+    //get current user profile
     axios.get(`http://localhost:3000/userprofile/${this.props.navigation.state.params.userId}`)
     .then((response) => {
       this.setState({
         user: response.data.user
       })
-      return axios.get('http://localhost:3000/groups/allGroups')
+      return axios.get(`http://localhost:3000/groups/member/${this.props.navigation.state.params.userId}`)
     })
+    //get groups that current user is a member of
     .then((response) => {
-      const groupsMember = [];
-      response.data.groups.forEach((group) => {
-        console.log('group', group.members)
-        if (group.members.includes(this.props.navigation.state.params.userId)) {
-          groupsMember.push(group);
-        }
-      })
       this.setState({
-        groupsMember: groupsMember
+        groupsMember: response
       })
       return axios.get(`http://localhost:3000/groups/${this.props.navigation.state.params.userId}`)
     })
+    //get groups that current user owns
     .then((response) => {
       this.setState({
         groupsOwned: response.data.groups
       })
     })
+    //
     .catch((err) => {
       console.log('error', err)
     })
@@ -110,25 +119,86 @@ export default class Profile extends React.Component {
    });
  }
 
+  // getMemberProfile = (group) => {
+  //   return group.members.map((memberId) => {
+  //     axios.get(`http://localhost:3000/userprofile/${memberId}`)
+  //     .then((response) => {
+  //       console.log(response.data);
+  //       return <Text>{response.data.user.username}</Text>
+  //     })
+  //     .catch((err) => {
+  //       console.log('error', err)
+  //     })
+  //   })
+  // }
+
+
   displayGroupsOwned = () => {
-    //axios request to get username from the people ?
-    return (
-      <View style={styles.innerContainer}>
-        {this.state.groupsOwned.map((group) => {
+    if (this.state.groupsOwned.length > 0) {
+      return this.state.groupsOwned.map((group) => {
+        return <TouchableOpacity><Text>
+          {group.name}: {group.members}
+        </Text></TouchableOpacity>
+      })
+    } else {
+      return;
+    }
+  }
+  //
+  displayOtherGroups = () => {
+    if (this.state.groupsOwned.length > 0) {
+      return this.state.groupsMember.map((group) => {
+        return <TouchableOpacity><Text>
+          {group.name}: {group.owner}(owner), {group.members}
+        </Text></TouchableOpacity>
+      })
+    } else {
+      return;
+    }
+  }
 
-          // axios.get(`http://localhost:3000/userprofile/${}`)
+  onFormSubmit = () => {
+    this.setState({
+      modalVisible: true
+    })
+  }
 
-          return <Text>{group.name}: {group.members}</Text>
-        })}
-      </View>
-    )
+  onModalSubmit = () => {
+    this.setState({
+      modalVisible: false
+    })
+    axios.get(`https://api.spotify.com/v1/search?q=${this.state.song}`)
+    .then((response) => {
+      if (response.data.success) {
+        console.log(response)
+      }
+    })
+    .catch((err) => {
+      console.log('error', err)
+    })
   }
 
   render() {
-    console.log(this.state);
     return (
       <View style={styles.container}>
         <Header title={'My TuneBud Profile'} />
+        <Modal
+          animationType={"slide"}
+          transparent={false}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {alert("Modal has been closed.")}}
+          >
+          <View style={{marginTop: 22}}>
+            <View>
+              <Text>Hello World!</Text>
+              <TouchableHighlight onPress={() => {
+                this.onModalSubmit()
+              }}>
+                <Text>Hide Modal</Text>
+              </TouchableHighlight>
+            </View>
+          </View>
+        </Modal>
         <ScrollView
           refreshControl={
             <RefreshControl
@@ -147,7 +217,30 @@ export default class Profile extends React.Component {
               <Text style={styles.name}>{this.state.user.username}</Text>
             </View>
           </View>
-          <Text style={styles.titleText}>Groups I own: </Text>
+          <Text style={styles.titleText}>Send a song </Text>
+          <View style={styles.innerContainer}>
+            <Text style={styles.searchTitle}>1. Search for a song: </Text>
+            <SearchBar
+              round={true}
+              lightTheme
+              containerStyle={styles.searchStyle}
+              onChangeText={(text) => this.setState({ song: text})}
+              placeholder='Search by song title...' />
+          </View>
+          <View style={styles.innerContainer}>
+            <Text style={styles.searchTitle}>2. Pick a group: </Text>
+            <Text>Groups I own: </Text>
+            {this.displayGroupsOwned()}
+            <Text>Groups I'm a part of: </Text>
+            {/* {this.displayOtherGroups()} */}
+          </View>
+          <Button
+            raised
+            title='Submit'
+            backgroundColor='#648f00'
+            buttonStyle={{ marginTop: 10, width: Dimensions.get('window').width * .4, alignSelf: 'center' }}
+            onPress={() => this.onFormSubmit()}
+          />
         </ScrollView>
       </View>
 

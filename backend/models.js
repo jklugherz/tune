@@ -11,7 +11,14 @@ var userSchema = new Schema({
   refreshToken: String,
   imageURL: String,
   accessToken: String,
-  groups: Array
+  groupsOwned: {
+    ref: Group,
+    type: mongoose.Schema.Types.ObjectId
+  },
+  memberOf: [{
+    ref: User,
+    type: mongoose.Schema.Types.ObjectId
+  }]
 });
 
 userSchema.statics.findOrCreate = function findOrCreate(idObj, tokensObj, infoObj, cb) {
@@ -43,7 +50,10 @@ var groupSchema = new Schema({
     ref: User,
     type: mongoose.Schema.Types.ObjectId
   },
-  members: Array
+  members: [{
+    ref: User,
+    type: mongoose.Schema.Types.ObjectId
+  }]
 })
 
 var User = mongoose.model('User', userSchema);

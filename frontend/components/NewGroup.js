@@ -10,7 +10,7 @@ import {
   ScrollView,
   Dimensions }
   from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Divider } from 'react-native-elements';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
@@ -113,10 +113,9 @@ export default class NewGroup extends React.Component {
   }
 
   onFormSubmit = () => {
-    console.log(this.state.groupMembers);
     axios.post('http://localhost:3000/groups/create', {
       name: this.state.groupName,
-      owner: this.state.currentUserId,
+      owner: this.state.currentUserId, //group owner is owner's id
       members: this.state.groupMembers
     })
     .then((response) => {
@@ -146,6 +145,7 @@ export default class NewGroup extends React.Component {
             source={{uri: user.imageURL}}
           />
           <Text style={styles.name}>{user.username}</Text>
+          <Divider style={{ backgroundColor: 'grey' }} />
         </View>
       </TouchableHighlight>
     )})
@@ -172,7 +172,7 @@ export default class NewGroup extends React.Component {
             raised
             title='Submit'
             backgroundColor='#648f00'
-            buttonStyle={{ marginTop: 10, width: Dimensions.get('window').width * .8, alignSelf: 'center' }}
+            buttonStyle={{ marginTop: 10, width: Dimensions.get('window').width * .5, alignSelf: 'center' }}
             onPress={() => this.onFormSubmit()}
           />
         </ScrollView>
