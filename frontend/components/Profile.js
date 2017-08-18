@@ -19,8 +19,6 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 var SpotifyWebApi = require('spotify-web-api-node');
 
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -73,6 +71,7 @@ export default class Profile extends React.Component {
       groupsOwned: [],
       groupsMember: [],
       song: '',
+      songData: {},
       chosenGroup: {},
       songResult: {},
       refreshing: false
@@ -160,19 +159,6 @@ export default class Profile extends React.Component {
     }
   }
 
-  onFormSubmit = () => {
-    this.setState({
-      modalVisible: true
-    })
-  }
-
-  handleChangeText = (song) => {
-    const songTitle = song.replace(' ', '%20')
-    this.setState({
-      song: songTitle
-    })
-  }
-
   getSearchResult = () => {
     axios.post(`http://localhost:3000/songsearch`, {
       id: this.state.user._id,
@@ -180,16 +166,25 @@ export default class Profile extends React.Component {
     })
     .then((response) => {
       console.log('refreshresponse', response.data.data)
+      this.openModal(response.data.data);
     })
     .catch((err) => {
       console.log('error', err)
     })
   }
 
+  openModal = (songData) => {
+    //do something with song data. render it onto the modal.
+    //when a user picks one song, send song info to backend. then create song instance. 
+    this.setState({
+      modalVisible: true
+    })
+  }
+
   onModalSubmit = () => {
-    // this.setState({
-    //   modalVisible: false
-    // })
+    this.setState({
+      modalVisible: false
+    })
   }
 
   render() {
@@ -204,7 +199,7 @@ export default class Profile extends React.Component {
           >
           <View style={{marginTop: 22}}>
             <View>
-              <Text>Hello World!</Text>
+              <Text>Song data will go here</Text>
               <TouchableHighlight onPress={() => {
                 this.onModalSubmit()
               }}>
@@ -238,7 +233,7 @@ export default class Profile extends React.Component {
               round={true}
               lightTheme
               containerStyle={styles.searchStyle}
-              onChangeText={(text) => this.handleChangeText(text)}
+              onChangeText={(text) => this.setState({song: text})}
               placeholder='Search by song title...' />
           </View>
           <View style={styles.innerContainer}>

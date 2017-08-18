@@ -109,10 +109,10 @@ router.post('/songsearch', (req, res) => {
       .then((data) => {
         const aToken = data.body['acces_token']
         SpotifyApi.setAccessToken(data.body['access_token']);
-        return SpotifyApi.searchTracks('Love')
+        return SpotifyApi.searchTracks(req.body.song)
       })
       .then((data) => {
-        console.log('Search by "Love"', data.body);
+        console.log('Search by ' + req.body.song, data.body);
         res.json({success: true, data: data.body})
       })
       .catch((err) => {

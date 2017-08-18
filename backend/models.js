@@ -54,6 +54,11 @@ var groupSchema = new Schema({
     ref: User,
     type: mongoose.Schema.Types.ObjectId
   }]
+});
+
+var songSchema = new Schema({
+  name: String,
+  album: String
 })
 
 var User = mongoose.model('User', userSchema);
