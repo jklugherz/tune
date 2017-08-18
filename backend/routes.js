@@ -94,11 +94,7 @@ router.get('/groups/:id', (req, res) => {
   })
 })
 
-router.get('/song', (req, res) => {
-  conosle.log('reached song server endpoint')
-})
-
-router.post('/refreshToken', (req, res) => {
+router.post('/songsearch', (req, res) => {
   User.findById(req.body.id, (err, user) => {
     if (err) {
     } else {
@@ -113,13 +109,20 @@ router.post('/refreshToken', (req, res) => {
       .then((data) => {
         const aToken = data.body['acces_token']
         SpotifyApi.setAccessToken(data.body['access_token']);
+        return SpotifyApi.searchTracks('Love')
+      })
+      .then((data) => {
+        console.log('Search by "Love"', data.body);
         res.json({success: true, data: data.body})
-      }, function(err) {
+      })
+      .catch((err) => {
         console.log('error', err)
       })
     }
   })
 })
+
+
 
 
 module.exports = router;

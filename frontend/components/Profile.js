@@ -173,49 +173,23 @@ export default class Profile extends React.Component {
     })
   }
 
-  refreshAccessVars = () => {
-    axios.post(`http://localhost:3000/refreshtoken`, {
-      id: this.state.user._id
+  getSearchResult = () => {
+    axios.post(`http://localhost:3000/songsearch`, {
+      id: this.state.user._id,
+      song: this.state.song
     })
     .then((response) => {
-      console.log('refreshresponse', response.data)
+      console.log('refreshresponse', response.data.data)
     })
     .catch((err) => {
       console.log('error', err)
     })
   }
 
-  getSearchResult = () => {
-    // axios.post(`https://accounts.spotify.com/api/token`, {
-    //   params: {
-    //     'grant_type': 'refresh_token',
-    //     'refresh_token': this.state.user.refreshToken
-    //   },
-    //   headers: {
-    //     'Authorization': `Basic <base64 encoded ${this.state.user.clientID}:${this.state.user.clientSecret}>`
-    //   }
-    // })
-    // .then((response) => {
-    //   conosle.log('search', response.data);
-    // })
-    // .catch((err) => {
-    //   console.log('error getting new token', err)
-    // })
-
-  }
-
   onModalSubmit = () => {
     // this.setState({
     //   modalVisible: false
     // })
-    // var options = {
-    //   headers: {
-    //     'Authorization': 'Bearer ' + this.state.user.accessToken,
-    //     'Content-Type': 'application/json'
-    //   }
-    // };
-
-    this.refreshAccessVars();
   }
 
   render() {
@@ -279,7 +253,7 @@ export default class Profile extends React.Component {
             title='Submit'
             backgroundColor='#648f00'
             buttonStyle={{ marginTop: 10, width: Dimensions.get('window').width * .4, alignSelf: 'center' }}
-            onPress={() => this.onModalSubmit()}
+            onPress={() => this.getSearchResult()}
           />
         </ScrollView>
       </View>
