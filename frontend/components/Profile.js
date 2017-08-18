@@ -11,10 +11,14 @@ import {
   RefreshControl,
   Modal
 } from 'react-native';
-import axios from 'axios';
 import { SearchBar, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Header from './Header';
+import axios from 'axios';
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+var SpotifyWebApi = require('spotify-web-api-node');
+
+
 
 
 const styles = StyleSheet.create({
@@ -102,7 +106,6 @@ export default class Profile extends React.Component {
         groupsOwned: response.data.groups
       })
     })
-    //
     .catch((err) => {
       console.log('error', err)
     })
@@ -170,25 +173,49 @@ export default class Profile extends React.Component {
     })
   }
 
-  onModalSubmit = () => {
-    // this.setState({
-    //   modalVisible: false
-    // })
-    var options = {
-      headers: {
-        'Authorization': 'Bearer ' + this.state.user.accessToken,
-      }
-    };
-
-    axios.get(`https://api.spotify.com/v1/search?q=${this.state.song}&type=song`, options)
+  refreshAccessVars = () => {
+    axios.post(`http://localhost:3000/refreshtoken`, {
+      id: this.state.user._id
+    })
     .then((response) => {
-      console.log(response.data)
+      console.log('refreshresponse', response.data)
     })
     .catch((err) => {
       console.log('error', err)
     })
+  }
 
+  getSearchResult = () => {
+    // axios.post(`https://accounts.spotify.com/api/token`, {
+    //   params: {
+    //     'grant_type': 'refresh_token',
+    //     'refresh_token': this.state.user.refreshToken
+    //   },
+    //   headers: {
+    //     'Authorization': `Basic <base64 encoded ${this.state.user.clientID}:${this.state.user.clientSecret}>`
+    //   }
+    // })
+    // .then((response) => {
+    //   conosle.log('search', response.data);
+    // })
+    // .catch((err) => {
+    //   console.log('error getting new token', err)
+    // })
 
+  }
+
+  onModalSubmit = () => {
+    // this.setState({
+    //   modalVisible: false
+    // })
+    // var options = {
+    //   headers: {
+    //     'Authorization': 'Bearer ' + this.state.user.accessToken,
+    //     'Content-Type': 'application/json'
+    //   }
+    // };
+
+    this.refreshAccessVars();
   }
 
   render() {

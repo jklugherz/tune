@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+var SpotifyWebApi = require('spotify-web-api-node');
 var models = require('./models');
 var User = models.User;
 var Group = models.Group;
@@ -95,6 +96,29 @@ router.get('/groups/:id', (req, res) => {
 
 router.get('/song', (req, res) => {
   conosle.log('reached song server endpoint')
+})
+
+router.post('/refreshToken', (req, res) => {
+  User.findById(req.body.id, (err, user) => {
+    if (err) {
+    } else {
+      const credentials = {
+        clientId: process.env.SPOTIFY_CLIENT_ID,
+        clientSecret: process.env.SPOTIFY_SECRET,
+        redirectUri: 'http://localhost:3000/auth/login/callback',
+        refreshToken: user.refreshToken
+      };
+      const SpotifyApi = new SpotifyWebApi(credentials);
+      SpotifyApi.refreshAccessToken()
+      .then((data) => {
+        const aToken = data.body['acces_token']
+        SpotifyApi.setAccessToken(data.body['access_token']);
+        res.json({success: true, data: data.body})
+      }, function(err) {
+        console.log('error', err)
+      })
+    }
+  })
 })
 
 

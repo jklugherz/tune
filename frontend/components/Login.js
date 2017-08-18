@@ -38,7 +38,7 @@ export default class Login extends React.Component {
         <TouchableOpacity onPress={() => {this._openWebBrowserAsync()}}>
           <Image
             source={require('../../assets/icons/log_in-mobile.png')}
-            style={{width: 200, resizeMode: 'contain', height: 200}}
+            style={{width: 300, resizeMode: 'contain', height: 300}}
           />
         </TouchableOpacity>
       </View>

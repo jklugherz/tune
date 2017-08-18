@@ -6,7 +6,7 @@ var User = models.User;
 module.exports = function(passport) {
 
   router.get('/auth/login',
-    passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private'] }));
+    passport.authenticate('spotify', {scope: ['user-read-email', 'user-read-private', 'user-library-modify'] }));
 
   router.get('/auth/login/callback',
     passport.authenticate('spotify', { failureRedirect: '/' }), function(req, res) {
